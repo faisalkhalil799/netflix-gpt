@@ -2,6 +2,8 @@
 
     - create react app
     - configure tailwind css
+    - routing
+    - login form/ sign up form
 
 # Features
 

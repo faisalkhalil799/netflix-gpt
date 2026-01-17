@@ -4,6 +4,11 @@
     - configure tailwind css
     - routing
     - login form/ sign up form
+    - form validation
+    - useRef hook
+    - firebase setup
+    - firebase deploy to prod
+    - create sign up user account in firebase
 
 # Features
 

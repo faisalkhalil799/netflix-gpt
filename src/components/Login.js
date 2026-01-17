@@ -1,11 +1,36 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Header from "./Header";
+import formValidate from "../utils/formValidate";
 
 const Login = () => {
   const [isSignIn, setIsSignIn] = useState(true);
+  const [errors, setErrors] = useState({});
+
+  const name = useRef(null);
+  const email = useRef(null);
+  const password = useRef(null);
 
   const toggleSignInForm = () => {
     setIsSignIn((prev) => !prev);
+    setErrors({}); // clear errors when switching
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const validationErrors = formValidate(
+      name?.current?.value,
+      email?.current?.value,
+      password?.current?.value,
+      isSignIn,
+    );
+
+    setErrors(validationErrors);
+    console.log(validationErrors);
+
+    if (Object.keys(validationErrors).length === 0) {
+      alert(isSignIn ? "Signed In!" : "Signed Up!");
+    }
   };
 
   const signInText = isSignIn ? "Sign In" : "Sign Up";
@@ -22,31 +47,52 @@ const Login = () => {
         alt="background image"
       />
 
-      <form className="absolute top-0 left-0 w-full h-screen flex items-center justify-center">
-        <div className="bg-black bg-opacity-75 p-10 rounded-lg flex flex-col gap-5 w-80 md:w-96">
+      <form
+        noValidate
+        onSubmit={handleSubmit}
+        className="absolute top-0 left-0 w-full h-screen flex items-center justify-center"
+      >
+        <div className="bg-black bg-opacity-75 p-10 rounded-lg flex flex-col gap-4 w-80 md:w-96">
           <p className="text-white text-2xl font-bold mb-2">{signInText}</p>
 
           {!isSignIn && (
-            <input
-              className="p-3 bg-gray-700 text-white rounded outline-none placeholder-gray-400"
-              type="text"
-              placeholder="Full Name"
-            />
+            <>
+              <input
+                ref={name}
+                className="p-3 bg-gray-700 text-white rounded outline-none placeholder-gray-400"
+                type="text"
+                placeholder="Full Name"
+              />
+              {errors.username && (
+                <p className="text-red-500 text-sm">{errors.username}</p>
+              )}
+            </>
           )}
 
           <input
+            ref={email}
             className="p-3 bg-gray-700 text-white rounded outline-none placeholder-gray-400"
             type="email"
             placeholder="Email Address"
           />
+          {errors.email && (
+            <p className="text-red-500 text-sm">{errors.email}</p>
+          )}
 
           <input
+            ref={password}
             className="p-3 bg-gray-700 text-white rounded outline-none placeholder-gray-400"
             type="password"
             placeholder="Password"
           />
+          {errors.password && (
+            <p className="text-red-500 text-sm">{errors.password}</p>
+          )}
 
-          <button className="bg-red-600 text-white p-3 rounded font-bold hover:bg-red-700 transition">
+          <button
+            type="submit"
+            className="bg-red-600 text-white p-3 rounded font-bold hover:bg-red-700 transition"
+          >
             {signInText}
           </button>
 

@@ -1,11 +1,21 @@
 import { useState, useRef } from "react";
 import Header from "./Header";
 import formValidate from "../utils/formValidate";
+import { auth } from "../utils/firebase";
+import {
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  updateProfile,
+} from "firebase/auth";
+import { useNavigate } from "react-router-dom";
+import { addUser } from "../utils/userSlice";
+import { useDispatch } from "react-redux";
 
 const Login = () => {
   const [isSignIn, setIsSignIn] = useState(true);
   const [errors, setErrors] = useState({});
-
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const name = useRef(null);
   const email = useRef(null);
   const password = useRef(null);
@@ -15,21 +25,51 @@ const Login = () => {
     setErrors({}); // clear errors when switching
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const nameValue = name?.current?.value || "";
+    const emailValue = email?.current?.value || "";
+    const passwordValue = password?.current?.value || "";
+
     const validationErrors = formValidate(
-      name?.current?.value,
-      email?.current?.value,
-      password?.current?.value,
+      nameValue,
+      emailValue,
+      passwordValue,
       isSignIn,
     );
 
     setErrors(validationErrors);
-    console.log(validationErrors);
 
-    if (Object.keys(validationErrors).length === 0) {
-      alert(isSignIn ? "Signed In!" : "Signed Up!");
+    // Stop if validation fails
+    if (Object.keys(validationErrors).length !== 0) return;
+
+    try {
+      if (isSignIn) {
+        await signInWithEmailAndPassword(auth, emailValue, passwordValue);
+
+        navigate("/browse");
+      } else {
+        await createUserWithEmailAndPassword(auth, emailValue, passwordValue);
+
+        await updateProfile(auth.currentUser, {
+          displayName: "Faisal",
+          photoURL: "https://avatars.githubusercontent.com/u/35756672?v=4",
+        });
+
+        dispatch(
+          addUser({
+            uid: auth.currentUser.uid,
+            email: auth.currentUser.email,
+            name: auth.currentUser.displayName,
+            photoUrl: auth.currentUser.photoURL,
+          }),
+        );
+        navigate("/browse");
+      }
+    } catch (error) {
+      console.error("FIREBASE ERROR:", error.code, error.message);
+      alert(error.message); // remove later, keep for debugging now
     }
   };
 
@@ -44,7 +84,7 @@ const Login = () => {
       <img
         className="w-full h-screen object-cover"
         src="https://assets.nflxext.com/ffe/siteui/vlv3/797df41b-1129-4496-beb3-6fc2f29c59d3/web/IN-en-20260112-TRIFECTA-perspective_004732f9-7464-4a7c-940b-4a51c4f0f73f_large.jpg"
-        alt="background image"
+        alt="background"
       />
 
       <form

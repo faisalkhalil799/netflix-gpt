@@ -9,6 +9,24 @@
     - firebase setup
     - firebase deploy to prod
     - create sign up user account in firebase
+    - create sign in as well
+    - implement sign in user api
+    - create redux store with userSlice
+    - implement sign out
+    - update our profile
+    - fetch movies from TMDB movies
+
+
+
+    * For form authentication we need backend, but for our case we will use google firebase
+    * Create project on firebase
+    * Add firebase to our web app
+    * Npm install firebase
+    * Enable authentication in firebase for our app
+    * Before deploying, run this command npm install  -g firebase-tools
+    * Firebase login
+    * Firebase init
+    * Firebase deploy
 
 # Features
 

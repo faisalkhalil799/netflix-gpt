@@ -1,4 +1,35 @@
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "../utils/firebase";
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { addUser, removeUser } from "../utils/userSlice";
+import { useNavigate } from "react-router-dom";
 const Header = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // we get this unsubscribe from firebase
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        dispatch(
+          addUser({
+            uid: user.uid,
+            email: user.email,
+            photoUrl: user.photoURL,
+            name: user.displayName,
+          }),
+        );
+        navigate("/browse");
+      } else {
+        navigate("/");
+
+        dispatch(removeUser());
+      }
+    });
+
+    return () => unsubscribe(); // cleanup
+  }, []);
   return (
     <div className="w-full absolute top-0 left-0 bg-gradient-to-b from-black to-transparent px-6 py-4">
       <img

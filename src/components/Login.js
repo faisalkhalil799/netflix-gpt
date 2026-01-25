@@ -7,14 +7,13 @@ import {
   createUserWithEmailAndPassword,
   updateProfile,
 } from "firebase/auth";
-import { useNavigate } from "react-router-dom";
 import { addUser } from "../utils/userSlice";
 import { useDispatch } from "react-redux";
+import { userPhoto } from "../utils/constants";
 
 const Login = () => {
   const [isSignIn, setIsSignIn] = useState(true);
   const [errors, setErrors] = useState({});
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const name = useRef(null);
   const email = useRef(null);
@@ -47,14 +46,12 @@ const Login = () => {
     try {
       if (isSignIn) {
         await signInWithEmailAndPassword(auth, emailValue, passwordValue);
-
-        navigate("/browse");
       } else {
         await createUserWithEmailAndPassword(auth, emailValue, passwordValue);
 
         await updateProfile(auth.currentUser, {
           displayName: "Faisal",
-          photoURL: "https://avatars.githubusercontent.com/u/35756672?v=4",
+          photoURL: userPhoto,
         });
 
         dispatch(
@@ -65,7 +62,6 @@ const Login = () => {
             photoUrl: auth.currentUser.photoURL,
           }),
         );
-        navigate("/browse");
       }
     } catch (error) {
       console.error("FIREBASE ERROR:", error.code, error.message);

@@ -14,8 +14,10 @@
     - create redux store with userSlice
     - implement sign out
     - update our profile
+    - create account on TMDB site
     - fetch movies from TMDB movies
-
+    - fetch a particular movie with movie id to display its trailer
+    - display trailer using iframe
 
 
     * For form authentication we need backend, but for our case we will use google firebase

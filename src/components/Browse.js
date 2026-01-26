@@ -4,11 +4,17 @@ import { removeUser } from "../utils/userSlice";
 import { signOut } from "firebase/auth";
 import { auth } from "../utils/firebase";
 import { AVATAR } from "../utils/constants";
+import useFetchMoviesData from "../utils/useFetchMoviesData";
+import MainContainer from "./MainContainer";
 
 const Browse = () => {
   const dispatch = useDispatch();
-  const user = useSelector((store) => store.user);
-
+  useFetchMoviesData();
+  const user = useSelector((store) => store?.user);
+  const moviesList = useSelector(
+    (store) => store?.moviesList?.nowPlayingMovies?.results,
+  );
+  const movieData = moviesList?.[1];
   const handleSignOut = async () => {
     try {
       await signOut(auth); //  sign out from Firebase
@@ -23,7 +29,7 @@ const Browse = () => {
       <Header />
 
       {/* User Info (Top Right) */}
-      <div className="absolute top-4 right-6 flex items-center gap-3">
+      <div className="absolute top-4 right-6 flex items-center gap-3 z-50">
         <p className="text-white font-semibold text-sm hidden sm:block">
           {user?.name}
         </p>
@@ -35,6 +41,7 @@ const Browse = () => {
           onClick={handleSignOut}
         />
       </div>
+      <MainContainer movieData={movieData} />
     </div>
   );
 };

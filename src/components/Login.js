@@ -50,7 +50,7 @@ const Login = () => {
         await createUserWithEmailAndPassword(auth, emailValue, passwordValue);
 
         await updateProfile(auth.currentUser, {
-          displayName: "Faisal",
+          displayName: nameValue,
           photoURL: userPhoto,
         });
 
@@ -64,8 +64,7 @@ const Login = () => {
         );
       }
     } catch (error) {
-      console.error("FIREBASE ERROR:", error.code, error.message);
-      alert(error.message); // remove later, keep for debugging now
+      setErrors(error.code + ": " + error.message);
     }
   };
 

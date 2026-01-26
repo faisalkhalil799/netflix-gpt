@@ -18,6 +18,11 @@
     - fetch movies from TMDB movies
     - fetch a particular movie with movie id to display its trailer
     - display trailer using iframe
+    - build secondary component
+    - build movie list
+    - build movie card
+    - create custom hook for popular,trending, top rated, now playing movies
+    - enhance UI with tailwind css
 
 
     * For form authentication we need backend, but for our case we will use google firebase

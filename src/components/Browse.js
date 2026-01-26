@@ -4,12 +4,21 @@ import { removeUser } from "../utils/userSlice";
 import { signOut } from "firebase/auth";
 import { auth } from "../utils/firebase";
 import { AVATAR } from "../utils/constants";
-import useFetchMoviesData from "../utils/useFetchMoviesData";
+import useNowPlayingMovies from "../utils/useNowPlayingMovies";
+import usePopularMovies from "../utils/usePopularMovies";
+import useTopRatedMovies from "../utils/useTopRatedMovies";
+import useUpcomingMovies from "../utils/useUpcomingMovies";
+
 import MainContainer from "./MainContainer";
+import SecondaryContainer from "./SecondaryContainer";
 
 const Browse = () => {
   const dispatch = useDispatch();
-  useFetchMoviesData();
+  useNowPlayingMovies();
+  usePopularMovies();
+  useTopRatedMovies();
+  useUpcomingMovies();
+
   const user = useSelector((store) => store?.user);
   const moviesList = useSelector(
     (store) => store?.moviesList?.nowPlayingMovies?.results,
@@ -25,7 +34,7 @@ const Browse = () => {
   };
 
   return (
-    <div className="relative min-h-screen">
+    <div className="relative min-h-screen bg-black overflow-x-hidden">
       <Header />
 
       {/* User Info (Top Right) */}
@@ -42,6 +51,7 @@ const Browse = () => {
         />
       </div>
       <MainContainer movieData={movieData} />
+      <SecondaryContainer />
     </div>
   );
 };

@@ -11,12 +11,15 @@ const MovieList = ({ title, movies }) => {
 
       {/* Horizontal Scroll */}
       <div className="flex gap-4 overflow-x-scroll scrollbar-hide">
-        {movies.map((movie) => (
-          <MovieCard
-            key={movie.id}
-            posterPath={IMAGE_CDN_LINK + movie.poster_path}
-          />
-        ))}
+        {movies.map(
+          (movie) =>
+            movie.poster_path && (
+              <MovieCard
+                key={movie.id}
+                posterPath={IMAGE_CDN_LINK + movie.poster_path}
+              />
+            ),
+        )}
       </div>
     </div>
   );

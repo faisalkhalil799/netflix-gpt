@@ -16,7 +16,10 @@ const VideoContainer = ({ id }) => {
         const data = await response.json();
 
         const trailers = data?.results?.filter(
-          (video) => video.type === "Trailer",
+          (video) =>
+            video.type === "Trailer" ||
+            video.type === "Clip" ||
+            video.type === "Teaser",
         );
 
         setTrailerId(trailers?.[0]?.key || null);
@@ -31,7 +34,7 @@ const VideoContainer = ({ id }) => {
   if (!trailerId) return null;
 
   return (
-    <div className="absolute inset-0 -z-10 overflow-hidden">
+    <div className="absolute inset-0 z-10 overflow-hidden">
       <iframe
         className="w-full h-full object-cover"
         src={`https://www.youtube.com/embed/${trailerId}?autoplay=1&mute=1&controls=0&loop=1&playlist=${trailerId}`}
